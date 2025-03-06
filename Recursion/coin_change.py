@@ -18,4 +18,19 @@ def coin_change(value_list, change):
                 min = change_times
     return min
 
-print(coin_change([1, 5, 10, 25], 58)) 
+def optimized_coin_change(value_list, change, known_results):
+    min = 9999999
+    if change in value_list:
+        known_results[change] = 1
+        return 1
+    elif known_results[change] > 0:
+        return known_results[change]
+    else:
+        for i in [c for c in value_list if c <= change]:
+            change_times = 1 + optimized_coin_change(value_list, change - i, known_results)
+            if change_times < min:
+                min = change_times
+                known_results[change] = min
+    return min
+
+print(optimized_coin_change([1, 5, 10, 25], 68, [0]*69))
